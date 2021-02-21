@@ -19,15 +19,6 @@ def landing():
     chaser=constants.CHASER, beater=constants.BEATER, keeper=constants.KEEPER,
     seeker=constants.SEEKER)
 
-# Simulate Season
-@app.route("/Simulate", methods=["POST"])
-def simulate():
-    if request.method == 'POST':
-        print(LEAGUE_TABLE)
-        return render_template("index.html", league_table=LEAGUE_TABLE, wins=constants.WINS, losses=constants.LOSSES, points_for=constants.POINTS_FOR,
-    points_against=constants.POINTS_AGAINST, snitches_caught=constants.SNITCHES_CAUGHT,
-    chaser=constants.CHASER, beater=constants.BEATER, keeper=constants.BEATER,
-    seeker=constants.SEEKER)
 
 if __name__ == '__main__':
     app.run(debug=True)
