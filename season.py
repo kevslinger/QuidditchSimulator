@@ -33,32 +33,33 @@ def simulate_season(LEAGUE_TABLE):
         
         while not SNITCH_CAUGHT:
             num_steps += 1
+            # Check if Team A's Chasers beat Team B's Beaters
             team_a_quaffle = np.random.rand() <= LEAGUE_TABLE[TEAM_A][constants.CHASER] / (LEAGUE_TABLE[TEAM_A][constants.CHASER] + LEAGUE_TABLE[TEAM_B][constants.BEATER])
+            # Check if Team B's Chasers beat Team A's Beaters
             team_b_quaffle = np.random.rand() <= LEAGUE_TABLE[TEAM_B][constants.CHASER] / (LEAGUE_TABLE[TEAM_B][constants.CHASER] + LEAGUE_TABLE[TEAM_A][constants.BEATER])
+            # Check if Team A's Chasers beat Team B's Keeper
             if team_a_quaffle and np.random.rand() > (LEAGUE_TABLE[TEAM_B][constants.KEEPER] / constants.KEEPER_PROB):
                 SCORE[TEAM_A] += 10
                 LEAGUE_TABLE[TEAM_A][constants.POINTS_FOR] += 10
                 LEAGUE_TABLE[TEAM_B][constants.POINTS_AGAINST] += 10
+            # Check if Team B's Chasers beat Team A's Keeper
             if team_b_quaffle and np.random.rand() > (LEAGUE_TABLE[TEAM_A][constants.KEEPER] / constants.KEEPER_PROB):
                 SCORE[TEAM_B] += 10
                 LEAGUE_TABLE[TEAM_B][constants.POINTS_FOR] += 10
                 LEAGUE_TABLE[TEAM_A][constants.POINTS_AGAINST] += 10
             # Finally, the Seeker
-            snitch_prob_a = np.random.rand()
-            snitch_prob_b = np.random.rand()
-            if snitch_prob_a <= (LEAGUE_TABLE[TEAM_A][constants.SEEKER]+1) / constants.SEEKER_PROB:
+            snitch_prob = np.random.rand()
+            if snitch_prob <= (LEAGUE_TABLE[TEAM_A][constants.SEEKER]+1) / constants.SEEKER_PROB:
                 TEAM_A_SNITCH = True
-            if snitch_prob_b <= (LEAGUE_TABLE[TEAM_B][constants.SEEKER] + 1)/ constants.SEEKER_PROB:
+            elif snitch_prob <= (LEAGUE_TABLE[TEAM_A][constants.SEEKER]+1+LEAGUE_TABLE[TEAM_B][constants.SEEKER]+1) / constants.SEEKER_PROB:
                 TEAM_B_SNITCH = True
             if TEAM_A_SNITCH and not TEAM_B_SNITCH:
-                #print(f"{TEAM_A} has caught the snitch! Game over!")
                 SCORE[TEAM_A] += 150
                 LEAGUE_TABLE[TEAM_A][constants.POINTS_FOR] += 150
                 LEAGUE_TABLE[TEAM_B][constants.POINTS_AGAINST] += 150
                 LEAGUE_TABLE[TEAM_A][constants.SNITCHES_CAUGHT] += 1
                 SNITCH_CAUGHT = True
             elif TEAM_B_SNITCH and not TEAM_A_SNITCH:
-                #print(f"{TEAM_B} has caught the snitch! Game over!")
                 SCORE[TEAM_B] += 150
                 LEAGUE_TABLE[TEAM_B][constants.POINTS_FOR] += 150
                 LEAGUE_TABLE[TEAM_A][constants.POINTS_AGAINST] += 150
@@ -74,8 +75,5 @@ def simulate_season(LEAGUE_TABLE):
         else:
             LEAGUE_TABLE[TEAM_B][constants.WINS] += 1
             LEAGUE_TABLE[TEAM_A][constants.LOSSES] += 1   
-        #utils.print_score(SCORE)
-        #utils.update_standings(game, STANDINGS, SCORE, TEAM_A_SNITCH)
-        #print(num_steps)
     utils.print_league_table(LEAGUE_TABLE)
     return LEAGUE_TABLE
