@@ -42,30 +42,31 @@
   <body>
     <div class="content">
       <h1>Quidditch Season Simulator</h1>
-      <h2>Click the Randomize button to see different skill points for each team and simulate the season!</h2>
+      <h2>Click the Randomize button to each team's skill points and simulate the season again!</h2>
         <div> 
           <form id="button" action="/" method="GET">
             <input type="submit" name = "" value="Randomize!" >
           </form>
         </div>
+        <p>Click on each column to sort by that value</p>
     </div>
     <br>
-    <table style="width:90%;margin-left:auto;margin-right:auto;">
+    <table id="LeagueTable" style="width:90%;margin-left:auto;margin-right:auto;">
         <tr>
           <th colspan="5">Team Composition</th>
           <th colspan="5">Season Results</th>
         </tr>
         <tr>
-          <th>Team Name</th>
-          <th>Chaser</th>
-          <th>Beater</th>
-          <th>Keeper</th>
-          <th>Seeker</th>
-          <th>Wins</th>
-          <th>Losses</th>
-          <th>Points<br>For</th>
-          <th>Points<br>Against</th>
-          <th>Snitches<br>Caught</th>
+          <th onclick="sortTable(0)">Team Name</th>
+          <th onclick="sortTable(1)">Chaser</th>
+          <th onclick="sortTable(2)">Beater</th>
+          <th onclick="sortTable(3)">Keeper</th>
+          <th onclick="sortTable(4)">Seeker</th>
+          <th onclick="sortTable(5)">Wins</th>
+          <th onclick="sortTable(6)">Losses</th>
+          <th onclick="sortTable(7)">Points<br>For</th>
+          <th onclick="sortTable(8)">Points<br>Against</th>
+          <th onclick="sortTable(9)">Snitches<br>Caught</th>
         </tr>
         {% for team in league_table %}
             <tr>
@@ -83,6 +84,76 @@
         {% endfor %}
       </table> 
   </body>
+<script>
+function sortTable(n) {
+  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+  table = document.getElementById("LeagueTable");
+  switching = true;
+  // Set the sorting direction to ascending:
+  dir = "desc";
+  /* Make a loop that will continue until
+  no switching has been done: */
+  while (switching) {
+    // Start by saying: no switching is done:
+    switching = false;
+    rows = table.rows;
+    /* Loop through all table rows (except the
+    first, which contains table headers): */
+    for (i = 2; i < (rows.length - 1); i++) {
+      // Start by saying there should be no switching:
+      shouldSwitch = false;
+      /* Get the two elements you want to compare,
+      one from current row and one from the next: */
+      x = rows[i].getElementsByTagName("td")[n];
+      y = rows[i + 1].getElementsByTagName("td")[n];
+      /* Check if the two rows should switch place,
+      based on the direction, asc or desc: */
+      if (dir == "asc") {
+        if (isNaN(parseInt(x.innerHTML))){
+            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+              // If so, mark as a switch and break the loop:
+              shouldSwitch = true;
+              break;
+            }
+        } else {
+            if (parseInt(x.innerHTML) > parseInt(y.innerHTML)) {
+                shouldSwitch = true;
+                break;
+            }
+        }
+      } else if (dir == "desc") {
+        if (isNaN(parseInt(x.innerHTML))){
+            if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+              // If so, mark as a switch and break the loop:
+              shouldSwitch = true;
+              break;
+            }
+        } else {
+            if (parseInt(x.innerHTML) < parseInt(y.innerHTML)) {
+                shouldSwitch = true;
+                break;
+            }
+        }
+      }
+    }
+    if (shouldSwitch) {
+      /* If a switch has been marked, make the switch
+      and mark that a switch has been done: */
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+      // Each time a switch is done, increase this count by 1:
+      switchcount ++;
+    } else {
+      /* If no switching has been done AND the direction is "asc",
+      set the direction to "desc" and run the while loop again. */
+      if (switchcount == 0 && dir == "desc") {
+        dir = "asc";
+        switching = true;
+      }
+    }
+  }
+}
+</script>
 </html>
 
 
