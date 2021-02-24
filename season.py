@@ -22,9 +22,9 @@ def simulate_season(LEAGUE_TABLE):
         }  
         while not SNITCH_CAUGHT:
             # Check if Team A's Chasers beat Team B's Beaters
-            team_a_quaffle = np.random.rand() <= LEAGUE_TABLE[TEAM_A][constants.CHASER] / (LEAGUE_TABLE[TEAM_A][constants.CHASER] + LEAGUE_TABLE[TEAM_B][constants.BEATER])
+            team_a_quaffle = LEAGUE_TABLE[TEAM_A][constants.CHASER] > 0 and np.random.rand() <= LEAGUE_TABLE[TEAM_A][constants.CHASER] / (LEAGUE_TABLE[TEAM_A][constants.CHASER] + LEAGUE_TABLE[TEAM_B][constants.BEATER])
             # Check if Team B's Chasers beat Team A's Beaters
-            team_b_quaffle = np.random.rand() <= LEAGUE_TABLE[TEAM_B][constants.CHASER] / (LEAGUE_TABLE[TEAM_B][constants.CHASER] + LEAGUE_TABLE[TEAM_A][constants.BEATER])
+            team_b_quaffle = LEAGUE_TABLE[TEAM_B][constants.CHASER] > 0 and np.random.rand() <= LEAGUE_TABLE[TEAM_B][constants.CHASER] / (LEAGUE_TABLE[TEAM_B][constants.CHASER] + LEAGUE_TABLE[TEAM_A][constants.BEATER])
             # Check if Team A's Chasers beat Team B's Keeper
             if team_a_quaffle and np.random.rand() > (LEAGUE_TABLE[TEAM_B][constants.KEEPER] / constants.KEEPER_PROB):
                 SCORE[TEAM_A] += 10
@@ -56,5 +56,5 @@ def simulate_season(LEAGUE_TABLE):
         else:
             LEAGUE_TABLE[TEAM_B][constants.WINS] += 1
             LEAGUE_TABLE[TEAM_A][constants.LOSSES] += 1   
-    utils.print_league_table(LEAGUE_TABLE)
+    #utils.print_league_table(LEAGUE_TABLE)
     return LEAGUE_TABLE

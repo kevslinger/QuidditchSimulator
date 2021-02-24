@@ -9,14 +9,14 @@
       h2 {color: black;
           font-size: 1rem;}
       h3 {color: black;
-          font-size: 1rem;}
+          font-size: 3rem;}
       table, th, td {
           border: 1px solid black;
           border-collapse: collapse;
           color: black;
         }
       html { 
-    background: #866c59 no-repeat center center fixed; 
+    background: #857265 no-repeat center center fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -38,6 +38,10 @@
    /*margin-top: 10px;*/
 }
     </style>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async
+              src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
   </head>
   <body>
     <div class="content">
@@ -82,7 +86,22 @@
                 <td>{{ league_table[team][snitches_caught] }}</td>
             </tr>
         {% endfor %}
-      </table> 
+      </table>
+  <h2>{{ winner_str }}</h2>
+  <br>
+  <br>
+  <h3>How this Simulator Works</h3>
+  <p>
+    Each team gets 20 skill points to randomly distribute amongst the 4 positions (Chaser, Beater, Keeper, Seeker). These values will be used to calculate how each turn of the simulation goes. Each turn, both teams will have a chance to win the quaffle, using the formula:
+    \[quaffle = \frac{chaser}{chaser + opp\ beater}\]
+    Once the chasers have secured the quaffle, they will secure a goal with probability:
+    \[goal = 1 - \frac{keeper}{50}\]
+    Combining these two, the probability that a team will get a goal at any given turn is:
+    \[goal = quaffle(1 - \frac{keeper}{50})\]
+    In the same turn, both seekers have a chance to catch the golden snitch, which happens with probability
+    \[snitch = \frac{seeker + 1}{500}\]
+    We play through a double round robin, meaning that each team plays each other team twice, for a total of 182 games.
+  </p>
   </body>
 <script>
 function sortTable(n) {

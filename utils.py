@@ -59,8 +59,24 @@ def update_standings(game, standings, score, team_a_snitch):
         standings[game[0]][constants.SNITCHES_CAUGHT] += 1
     else:
         standings[game[1]][constants.SNITCHES_CAUGHT] += 1
-        
 
+
+def get_winner_str(league):
+    max_wins = 0
+    max_win_teams = list()
+    for team in league:
+        if league[team][constants.WINS] > max_wins:
+            max_wins = league[team][constants.WINS]
+            max_win_teams = [team]
+        elif league[team][constants.WINS] == max_wins:
+            max_win_teams.append(team)
+    output_str = "Congrats to the "
+    if len(max_win_teams) < 3:
+        output_str += f"{' and '.join(max_win_teams)}"
+    else:
+        output_str += f"{', '.join(max_win_teams[:-1])}, and {max_win_teams[-1]}"
+    output_str += f" for winning the league with {max_wins} wins!"
+    return output_str
 
 
 
@@ -85,7 +101,7 @@ def print_score(score):
 
 def print_league_table(league_table):
     """Print out each team and their standings in tabular format"""
-    output_str = "Team Name\t\t" + '\t'.join(constants.STATS + constants.POSITIONS) + '\n'
+    output_str = "Team Name\t\t" + '\t'.join(constants.POSITIONS + constants.STATS) + '\n'
     for team in constants.TEAMS:
         output_str += f"{team}: "
         for position_or_stat in constants.POSITIONS + constants.STATS:
